@@ -1,0 +1,27 @@
+import { ImageProcessor } from "../services/image.processor";
+import { ImageInputValidator } from "../validators/image.input.validator";
+import express from "express";
+const processor = new ImageProcessor();
+const validator = new ImageInputValidator();
+const router = express.Router();
+const rootFileName = ".";
+
+router.get("/:name/:width/:height", async (req, res) => {
+  const width = req.params.width;
+  const height = req.params.height;
+  const name = req.params.name;
+  try {
+    const validationErrors = validator.validate(name, width, height);
+    if (validationErrors.length > 0) {
+      res.status(400).send(validationErrors);
+      return;
+    }
+
+    const result = await processor.resize(name, Number(width), Number(height));
+    res.sendFile(result.filePath, { root: rootFileName });
+  } catch (error) {
+    res.status(500).send(`Something went wrong - ${error}`);
+  }
+});
+
+export default router;
