@@ -1,26 +1,68 @@
 import sharp, { OutputInfo } from "sharp";
+import fs from "fs";
+
+interface ImageProcessorOutput {
+  width: number;
+  height: number;
+  format: string;
+  filePath: string;
+}
 
 export class ImageProcessor {
   private pathToResources = "src/resources";
   private fileFormat = ".jpeg";
-  public async resizeImage(
+  public async resize(
     imageName: string,
     width: number,
     height: number
-  ): Promise<OutputInfo> {
+  ): Promise<ImageProcessorOutput> {
     const sourceImagePath = `${this.pathToResources}/${imageName}${this.fileFormat}`;
     const formattedFilePath = `${this.pathToResources}/Processed/${imageName}${width}x${height}${this.fileFormat}`;
 
-    console.log(sourceImagePath);
-    console.log(formattedFilePath);
+    if (await this.checkFileExists(formattedFilePath)) {
+      console.log("Re-using resized image");
+      return { width, height, format: "jpeg", filePath: formattedFilePath };
+    }
+
+    console.log("Resizing image");
 
     try {
-      return sharp(sourceImagePath)
-        .resize(width, height)
-        .toFile(formattedFilePath);
+      return await this.resizeImage(
+        sourceImagePath,
+        formattedFilePath,
+        width,
+        height
+      );
     } catch (error) {
       console.log(error);
       throw error;
+    }
+  }
+
+  async resizeImage(
+    sourcefilePath: string,
+    resultFilePath: string,
+    width: number,
+    height: number
+  ): Promise<ImageProcessorOutput> {
+    const outputInfo = await sharp(sourcefilePath)
+      .resize(width, height)
+      .toFile(resultFilePath);
+
+    return {
+      width: outputInfo.width,
+      height: outputInfo.height,
+      format: outputInfo.format,
+      filePath: resultFilePath,
+    };
+  }
+
+  private async checkFileExists(filePath: string): Promise<boolean> {
+    try {
+      await fs.promises.access(filePath);
+      return true;
+    } catch (error) {
+      return false;
     }
   }
 }
