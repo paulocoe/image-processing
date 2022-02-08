@@ -108,3 +108,6 @@ build/
 
 # Mac indexing file
 .DS_Store
+
+# Processed images
+src/resources/Processed
