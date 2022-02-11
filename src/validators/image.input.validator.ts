@@ -7,11 +7,12 @@ export class ImageInputValidator {
     "icelandwaterfall",
   ];
 
-  public validate(name: string, width: string, height: string): string[] {
-    const validationErrors = [];
+  public validateImageName(name: string): boolean {
+    return !this.images.some((x) => x === name);
+  }
 
-    if (!this.images.some((x) => x === name))
-      validationErrors.push(`Name '${name}' is invalid.`);
+  public validateSize(width: string, height: string): string[] {
+    const validationErrors = [];
 
     if (isNaN(Number(width)))
       validationErrors.push(`Width '${width}' is invalid.`);
