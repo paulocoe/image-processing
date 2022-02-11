@@ -15,11 +15,19 @@ describe("Images Route", () => {
       expect(response.text).toBe("Image 'abc' not found.");
     });
 
-    it("Gets bad request", async () => {
+    it("Gets bad request when width and height are NaN", async () => {
       const response = await request.get("/images/santamonica/2sf34/f5d");
       expect(response.status).toBe(400);
       expect(response.text).toBe(
-        `["Width '2sf34' is invalid.","Height 'f5d' is invalid."]`
+        `["Width '2sf34' must be a positive integer number.","Height 'f5d' must be a positive integer number."]`
+      );
+    });
+
+    it("Gets bad request when width and height are non positive", async () => {
+      const response = await request.get("/images/santamonica/-3/0");
+      expect(response.status).toBe(400);
+      expect(response.text).toBe(
+        `["Width '-3' must be a positive integer number.","Height '0' must be a positive integer number."]`
       );
     });
   });

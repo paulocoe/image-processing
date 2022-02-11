@@ -35,7 +35,7 @@ export class ImageProcessor {
         height
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }
   }

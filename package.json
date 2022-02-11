@@ -7,8 +7,8 @@
     "start": "npm run build && node ./build/app.js",
     "build": "npm run lint && npm run prettier && npx tsc",
     "dev": "nodemon ./src/app.ts",
-    "lint": "eslint src/app.ts",
-    "prettier": "npx prettier -w src/",
+    "lint": "eslint src/*.ts",
+    "prettier": "npx prettier -w src/*.ts",
     "test": "npm run build && jasmine"
   },
   "keywords": [],
@@ -20,7 +20,6 @@
     "mkdirp": "^1.0.4",
     "morgan": "^1.10.0",
     "sharp": "^0.30.0",
-    "supertest": "^6.2.2",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.5"
   },
@@ -36,6 +35,7 @@
     "jasmine": "^4.0.2",
     "jasmine-console-reporter": "^2.0.1",
     "nodemon": "^2.0.15",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "supertest": "^6.2.2"
   }
 }
