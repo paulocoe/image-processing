@@ -22,11 +22,8 @@ export class ImageProcessor {
     const formattedFilePath = `${this.pathToProcessed}/${imageName}${width}x${height}${this.fileFormat}`;
 
     if (await this.checkFileExists(formattedFilePath)) {
-      console.log("Re-using resized image");
       return { width, height, format: "jpeg", filePath: formattedFilePath };
     }
-
-    console.log("Resizing image");
 
     try {
       await mkdirp(this.pathToProcessed);
