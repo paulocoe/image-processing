@@ -1,4 +1,5 @@
-import sharp, { OutputInfo } from "sharp";
+import sharp from "sharp";
+import mkdirp from "mkdirp";
 import fs from "fs";
 
 interface ImageProcessorOutput {
@@ -10,6 +11,7 @@ interface ImageProcessorOutput {
 
 export class ImageProcessor {
   private pathToResources = "src/resources";
+  private pathToProcessed = `${this.pathToResources}/Processed`;
   private fileFormat = ".jpeg";
   public async resize(
     imageName: string,
@@ -17,7 +19,7 @@ export class ImageProcessor {
     height: number
   ): Promise<ImageProcessorOutput> {
     const sourceImagePath = `${this.pathToResources}/${imageName}${this.fileFormat}`;
-    const formattedFilePath = `${this.pathToResources}/Processed/${imageName}${width}x${height}${this.fileFormat}`;
+    const formattedFilePath = `${this.pathToProcessed}/${imageName}${width}x${height}${this.fileFormat}`;
 
     if (await this.checkFileExists(formattedFilePath)) {
       console.log("Re-using resized image");
@@ -27,6 +29,8 @@ export class ImageProcessor {
     console.log("Resizing image");
 
     try {
+      await mkdirp(this.pathToProcessed);
+
       return await this.resizeImage(
         sourceImagePath,
         formattedFilePath,
