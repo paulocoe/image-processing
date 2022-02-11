@@ -11,7 +11,12 @@ router.get("/:name/:width/:height", async (req, res) => {
   const height = req.params.height;
   const name = req.params.name;
   try {
-    const validationErrors = validator.validate(name, width, height);
+    if (validator.validateImageName(name)) {
+      res.status(404).send(`Image '${name}' not found.`);
+      return;
+    }
+
+    const validationErrors = validator.validateSize(width, height);
     if (validationErrors.length > 0) {
       res.status(400).send(validationErrors);
       return;
