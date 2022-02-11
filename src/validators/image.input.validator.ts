@@ -13,12 +13,15 @@ export class ImageInputValidator {
 
   public validateSize(width: string, height: string): string[] {
     const validationErrors = [];
+    const errorMessage = "must be a positive integer number.";
+    const parsedWidth = Number(width);
+    const parsedHeight = Number(height);
 
-    if (isNaN(Number(width)))
-      validationErrors.push(`Width '${width}' is invalid.`);
+    if (isNaN(parsedWidth) || parsedWidth <= 0)
+      validationErrors.push(`Width '${width}' ${errorMessage}`);
 
-    if (isNaN(Number(height)))
-      validationErrors.push(`Height '${height}' is invalid.`);
+    if (isNaN(parsedHeight) || parsedHeight <= 0)
+      validationErrors.push(`Height '${height}' ${errorMessage}`);
 
     return validationErrors;
   }
